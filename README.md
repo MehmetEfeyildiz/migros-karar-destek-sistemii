@@ -252,6 +252,39 @@ The system uses 4 main tables:
 3. **sales** - Sales transaction records
 4. **planned_stores** - Future store planning data
 
+```mermaid
+erDiagram
+    CITIES ||--o{ STORES : "has"
+    CITIES ||--o{ PLANNED_STORES : "planned in"
+    STORES ||--o{ SALES : "makes"
+
+    CITIES {
+        int city_id PK
+        string city_name
+        int population
+    }
+
+    STORES {
+        int store_id PK
+        string store_name
+        string status
+        int city_id FK
+    }
+
+    SALES {
+        int sale_id PK
+        decimal amount
+        date date
+        int store_id FK
+    }
+
+    PLANNED_STORES {
+        int plan_id PK
+        string region
+        date target_date
+        int city_id FK
+    }
+
 See `database/schema.sql` for complete schema with indexes and relationships.
 
 ## 🔧 Development
@@ -296,5 +329,6 @@ ISC
 ## 👨‍💻 Author
 
 University Assignment - Mehmet Efe Yıldız
+
 
 
