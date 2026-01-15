@@ -1,0 +1,274 @@
+/* Genel Ayarlar */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #927f6c;
+    color: #ffffff;
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Scroll engellemek için */
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    width: 100%;
+    position: relative; /* Konteyneri konumlandırmak için */
+}
+/* Harita */
+#map {
+    height: 600px;
+    width: 100%;
+    z-index: 1; /* Harita alt sırada olacak */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 70px;
+    background-color: #e4980a;
+    color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    position: absolute; /* Sidebar'ı konumlandırmak için */
+    height: 100%;
+    z-index: 10; /* Sidebar üst sırada olacak */
+}
+
+.sidebar:hover {
+    width: 250px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: none;
+}
+
+.sidebar:hover h2 {
+    opacity: 1;
+    display: block;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul.menu {
+    flex-grow: 1;
+    padding-top: 20px;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    transition: background 0.3s;
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #bdc3c7;
+    font-size: 16px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar ul li a i {
+    font-size: 24px;
+    margin-right: 10px;
+    min-width: 24px; /* İkonları hizalı tutmak için */
+    text-align: center;
+}
+
+.sidebar ul li a:hover {
+    background-color: #3498db;
+    color: #ecf0f1;
+    border-radius: 12px;
+}
+
+.menu-text {
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateX(-10px);
+    display: none;
+}
+
+.sidebar:hover .menu-text {
+    opacity: 1;
+    transform: translateX(0);
+    display: inline-block;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 20px 40px;
+    background: url('../images/loginbackground.jpg') no-repeat center center; /* Arka plan görselini burada tanımlayın */
+    background-size: cover; /* Görselin tüm alana yayılmasını sağlar */
+    transition: margin-left 0.3s ease;
+    margin-left: 70px; /* Sidebar'dan dolayı boşluk bırakmak için */
+    height: 100vh;
+}
+
+/* Widgets */
+.widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Grid sisteminin sütunları */
+    gap: 20px;
+    grid-auto-rows: minmax(200px, auto); /* Yükseklik ayarı */
+}
+
+/* Widget */
+.widget {
+    background: #e7a01c;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(223, 97, 39, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.widget h3 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.widget p {
+    color: #bdc3c7;
+    font-size: 18px;
+}
+
+.widget canvas {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Yeni Widget */
+.new-widget {
+    grid-column: span 2; /* 3 sütun genişliğinde */
+    grid-row: 2 / 3; /* Bu satıra yerleştirilmesini sağlar */
+    background: #e7a01c;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(127, 30, 139, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Ortalamak için */
+    align-items: center; /* Ortalamak için */
+}
+
+.new-widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(145, 33, 160, 0.4);
+}
+
+.new-widget h3 {
+    margin-top: 0;
+    color: #ffffff;
+    text-align: center; /* Başlık ortalanır */
+}
+
+.new-widget p {
+    color: #fafafa;
+    font-size: 18px;
+    text-align: center; /* Paragraf ortalanır */
+}
+
+.new-widget canvas {
+    width: 100%; /* canvas'ın tam genişlikte olması için */
+    height: 80%; /* canvas'ın tam yükseklikte olması için */
+    display: block;
+    margin: 0 auto;
+}
+
+
+
+/* Yatay Widget */
+.horizontal-widget {
+    background: #e7a01c;
+    color: white;
+    padding: 10px 20px; /* Daha kısa yapıldı */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Yatay widget'ın genişliği */
+    max-width: 1200px; /* Maksimum genişlik */
+    margin: 0 auto; /* Ortalamak için */
+    position: absolute; /* Üst üste binmesini sağlamak için */
+    top: 20px; /* Sayfanın üst kısmına yakın olsun */
+    left: 50%;
+    transform: translateX(-50%); /* Ortalamak için */
+    z-index: 10; /* Diğer widget'ların üstünde görünmesi için */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animasyon eklendi */
+}
+
+/* Fare ile üzerine gelindiğinde animasyon */
+.horizontal-widget:hover {
+    transform: translateX(-50%) scale(1.05); /* Daha belirgin hale getirme */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Gölge daha belirgin olacak */
+}
+
+/* Diğer widget'ların alt kısmına kaymaması için bir boşluk bırak */
+.main-content {
+    position: relative;
+}
+
+.widget-container {
+    position: relative; /* Widget'ların yerleşimi için referans */
+}
+
+/* Yenilenmiş Widget */
+.renewed-widget {
+    background: #9c88ff;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: absolute; /* Diğer widgetlara göre konumlandırma */
+    bottom: 160px; /* Ana alanın alt kısmına yakın */
+    right: 100px; /* Sağda hizalanmış */
+    width: 450px; /* Genişlik */
+    height: 370px; /* Yükseklik */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* İçeriği ortalar */
+    align-items: center; /* İçeriği ortalar */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.renewed-widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.renewed-widget h3 {
+    margin-top: 0;
+    color: #ffffff;
+    text-align: center;
+}
+
+.renewed-widget p {
+    color: #f8f8f8;
+    font-size: 16px;
+    text-align: center;
+}

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDS - Modern Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .controls {
+            margin: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .control-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 280px;
+            background: linear-gradient(145deg, #ff9966, #ff7733);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .control-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 153, 102, 0.2);
+        }
+        .control-group label {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .control-group label i {
+            font-size: 18px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 5px;
+        }
+        select {
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: transparent !important; /* Important eklendi */
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px top 50%;
+            background-size: 12px auto;
+        }
+
+        select option {
+            background-color: #ff7733;
+            color: white;
+            padding: 12px;
+        }
+
+        select:hover {
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        select:focus {
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .control-group::before {
+            display: none;
+        }
+
+        .select-container, .select-icon {
+            display: none;
+        }
+
+        .control-group:nth-child(1)::before,
+        .control-group:nth-child(2)::before,
+        .control-group:nth-child(3)::before {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>MİGROS</h2>
+            <ul class="menu">
+                <li><a href="dashboard.html"><i class="fas fa-home"></i><span class="menu-text">Ana Sayfa</span></a></li>
+                <li><a href="kullanici.html"><i class="fas fa-user"></i><span class="menu-text">Kullanıcı Talepleri</span></a></li>
+                <li><a href="analiz.html"><i class="fas fa-chart-line"></i><span class="menu-text">Haritalı Analiz</span></a></li>
+                <li><a href="satis.html"><i class="fas fa-solid fa-truck"></i><span class="menu-text">Satış</span></a></li>
+                <li><a href="tahminleme.html"><i class="fas fa-solid fa-business-time"></i><span class="menu-text">Tahminleme</span></a></li>
+                <li><a href="marketler.html"><i class="fas fa-solid fa-shop"></i><span class="menu-text">Marketler</span></a></li>
+            </ul>
+            <ul class="settings">
+                <li><a href="#"><i class="fas fa-cog"></i><span class="menu-text">Ayarlar</span></a></li>
+            </ul>
+            <ul class="logout">
+                <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Çıkış Yap</span></a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <header class="main-header">
+                <h1>Haritalı Gösterim</h1>
+                <p>Harita üzerinden talepleriniz doğrultusunda il seçimi yapabilirsiniz.</p>
+            </header>
+
+            <div id="map"></div>
+
+            <!-- Kullanıcı seçim kutuları -->
+            <div class="controls">
+                <div class="control-group">
+                    <label for="population-select"><i class="fas fa-users"></i>Nüfus Seçin</label>
+                    <select id="population-select">
+                        <option value="">Seçiniz</option>
+                        <option value="small">Küçük (1 milyon ve altı)</option>
+                        <option value="medium">Orta (1-5 milyon)</option>
+                        <option value="large">Büyük (10 milyon ve üzeri)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="sales-select"><i class="fas fa-store"></i>Migros Sayısı Seçin</label>
+                    <select id="sales-select">
+                        <option value="">Seçiniz</option>
+                        <option value="low">Düşük (0-500)</option>
+                        <option value="medium">Orta (500-1000)</option>
+                        <option value="high">Yüksek (1000 ve üzeri)</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="coastal-select"><i class="fas fa-water"></i>Tedarik Ağı Uygunluğu</label>
+                    <select id="coastal-select">
+                        <option value="">Seçiniz</option>
+                        <option value="yes">Evet</option>
+                        <option value="no">Hayır</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([39.9334, 32.8597], 6); // Harita merkezi Türkiye'ye yerleştirildi
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Şehirler ve özellikleri
+        var cities = [
+        { name: "Adana", coordinates: [37.0, 35.3213], population: "2.2 milyon", sales: 1000, coastal: true },
+    { name: "Adıyaman", coordinates: [37.7647, 38.2767], population: "0.6 milyon", sales: 350, coastal: false },
+    { name: "Afyonkarahisar", coordinates: [38.7585, 30.5567], population: "0.7 milyon", sales: 400, coastal: false },
+    { name: "Aksaray", coordinates: [38.3710, 34.0351], population: "0.4 milyon", sales: 250, coastal: false },
+    { name: "Amasya", coordinates: [40.6534, 35.8333], population: "0.3 milyon", sales: 150, coastal: false },
+    { name: "Ankara", coordinates: [39.9334, 32.8597], population: "5.1 milyon", sales: 400, coastal: false },
+    { name: "Antalya", coordinates: [36.8856, 30.7056], population: "2.5 milyon", sales: 1500, coastal: true },
+    { name: "Ardahan", coordinates: [41.1106, 42.7012], population: "0.1 milyon", sales: 100, coastal: false },
+    { name: "Artvin", coordinates: [41.3200, 41.8000], population: "0.2 milyon", sales: 200, coastal: true },
+    { name: "Aydın", coordinates: [37.8620, 27.8324], population: "1.1 milyon", sales: 900, coastal: true },
+    { name: "Balıkesir", coordinates: [39.6541, 27.8833], population: "1.2 milyon", sales: 850, coastal: true },
+    { name: "Bilecik", coordinates: [40.1404, 29.9780], population: "0.2 milyon", sales: 150, coastal: false },
+    { name: "Bingöl", coordinates: [38.8833, 40.4667], population: "0.3 milyon", sales: 100, coastal: false },
+    { name: "Bitlis", coordinates: [38.4011, 42.1072], population: "0.4 milyon", sales: 120, coastal: false },
+    { name: "Bolu", coordinates: [40.5734, 31.6245], population: "0.3 milyon", sales: 200, coastal: false },
+    { name: "Burdur", coordinates: [37.4691, 30.0667], population: "0.3 milyon", sales: 250, coastal: false },
+    { name: "Bursa", coordinates: [40.1953, 29.0609], population: "3.1 milyon", sales: 1200, coastal: true },
+    { name: "Çanakkale", coordinates: [40.1533, 26.4069], population: "0.5 milyon", sales: 300, coastal: true },
+    { name: "Çorum", coordinates: [40.5222, 34.9550], population: "0.5 milyon", sales: 150, coastal: false },
+    { name: "Denizli", coordinates: [37.7793, 29.0817], population: "1.0 milyon", sales: 600, coastal: false },
+    { name: "Diyarbakır", coordinates: [37.9100, 40.2300], population: "1.7 milyon", sales: 1000, coastal: false },
+    { name: "Düzce", coordinates: [40.8433, 31.1628], population: "0.4 milyon", sales: 300, coastal: false },
+    { name: "Edirne", coordinates: [41.6764, 26.5619], population: "0.4 milyon", sales: 200, coastal: false },
+    { name: "Elazığ", coordinates: [38.6800, 39.2261], population: "0.6 milyon", sales: 350, coastal: false },
+    { name: "Erzincan", coordinates: [39.7500, 39.1000], population: "0.4 milyon", sales: 250, coastal: false },
+    { name: "Erzurum", coordinates: [39.9333, 41.2675], population: "0.7 milyon", sales: 400, coastal: false },
+    { name: "Eskişehir", coordinates: [39.7763, 30.5206], population: "0.9 milyon", sales: 500, coastal: false },
+    { name: "Gaziantep", coordinates: [37.0662, 37.3833], population: "2.0 milyon", sales: 1100, coastal: false },
+    { name: "Giresun", coordinates: [40.9069, 38.4000], population: "0.4 milyon", sales: 200, coastal: true },
+    { name: "Gümüşhane", coordinates: [40.4539, 39.4897], population: "0.3 milyon", sales: 150, coastal: false },
+    { name: "Hakkari", coordinates: [37.5736, 43.7414], population: "0.3 milyon", sales: 100, coastal: false },
+    { name: "Hatay", coordinates: [36.4310, 36.3981], population: "1.6 milyon", sales: 1300, coastal: true },
+    { name: "Iğdır", coordinates: [40.0400, 44.0400], population: "0.2 milyon", sales: 150, coastal: false },
+    { name: "Isparta", coordinates: [37.7590, 30.5554], population: "0.5 milyon", sales: 250, coastal: false },
+    { name: "İstanbul", coordinates: [41.0082, 28.9784], population: "15.8 milyon", sales: 2000, coastal: true },
+    { name: "İzmir", coordinates: [38.4192, 27.1287], population: "4.4 milyon", sales: 800, coastal: true },
+    { name: "Kahramanmaraş", coordinates: [37.5736, 36.9377], population: "1.2 milyon", sales: 600, coastal: false },
+    { name: "Karabük", coordinates: [41.2000, 32.6100], population: "0.2 milyon", sales: 150, coastal: false },
+    { name: "Karaman", coordinates: [37.1833, 33.2167], population: "0.4 milyon", sales: 200, coastal: false },
+    { name: "Kastamonu", coordinates: [41.3833, 33.7833], population: "0.4 milyon", sales: 150, coastal: false },
+    { name: "Kayseri", coordinates: [38.7237, 35.4800], population: "1.4 milyon", sales: 900, coastal: false },
+    { name: "Kırıkkale", coordinates: [39.8500, 33.6167], population: "0.3 milyon", sales: 200, coastal: false },
+    { name: "Kırklareli", coordinates: [41.7376, 27.2260], population: "0.3 milyon", sales: 150, coastal: true },
+    { name: "Kilis", coordinates: [36.7106, 37.1144], population: "0.1 milyon", sales: 100, coastal: false },
+    { name: "Kocaeli", coordinates: [40.9833, 29.8811], population: "2.0 milyon", sales: 1200, coastal: true },
+    { name: "Konya", coordinates: [37.8714, 32.4840], population: "2.1 milyon", sales: 600, coastal: false },
+    { name: "Kütahya", coordinates: [39.4214, 29.9781], population: "0.5 milyon", sales: 250, coastal: false },
+    { name: "Malatya", coordinates: [38.3556, 38.3114], population: "0.8 milyon", sales: 500, coastal: false },
+    { name: "Manisa", coordinates: [38.4192, 27.1287], population: "1.4 milyon", sales: 800, coastal: false },
+    { name: "Mardin", coordinates: [37.3120, 40.7527], population: "0.8 milyon", sales: 450, coastal: false },
+    { name: "Mersin", coordinates: [36.8131, 34.6399], population: "1.8 milyon", sales: 1300, coastal: true },
+    { name: "Muğla", coordinates: [37.2153, 28.3667], population: "0.9 milyon", sales: 700, coastal: true },
+    { name: "Nevşehir", coordinates: [38.6889, 34.6742], population: "0.3 milyon", sales: 200, coastal: false },
+    { name: "Niğde", coordinates: [37.9667, 34.6833], population: "0.3 milyon", sales: 150, coastal: false },
+    { name: "Ordu", coordinates: [40.9807, 37.8766], population: "0.8 milyon", sales: 400, coastal: true },
+    { name: "Osmaniye", coordinates: [37.0700, 36.2499], population: "0.5 milyon", sales: 300, coastal: false },
+    { name: "Rize", coordinates: [41.0200, 40.5156], population: "0.3 milyon", sales: 200, coastal: true },
+    { name: "Sakarya", coordinates: [40.9444, 30.4067], population: "1.0 milyon", sales: 800, coastal: true },
+    { name: "Samsun", coordinates: [41.2867, 36.33], population: "1.3 milyon", sales: 700, coastal: true },
+    { name: "Siirt", coordinates: [37.9333, 41.9500], population: "0.3 milyon", sales: 150, coastal: false },
+    { name: "Sinop", coordinates: [42.0087, 35.1536], population: "0.2 milyon", sales: 100, coastal: true },
+    { name: "Sivas", coordinates: [39.7500, 37.0000], population: "0.6 milyon", sales: 350, coastal: false },
+    { name: "Tekirdağ", coordinates: [40.9794, 27.5100], population: "1.0 milyon", sales: 600, coastal: true },
+    { name: "Tokat", coordinates: [40.3100, 36.5500], population: "0.5 milyon", sales: 250, coastal: false },
+    { name: "Trabzon", coordinates: [41.0000, 39.7167], population: "0.8 milyon", sales: 400, coastal: true },
+    { name: "Tunceli", coordinates: [39.1000, 39.5500], population: "0.1 milyon", sales: 100, coastal: false },
+    { name: "Şanlıurfa", coordinates: [37.1611, 38.7969], population: "2.0 milyon", sales: 850, coastal: false },
+    { name: "Uşak", coordinates: [38.6821, 29.4103], population: "0.4 milyon", sales: 200, coastal: false },
+    { name: "Van", coordinates: [38.3000, 43.4167], population: "0.4 milyon", sales: 200, coastal: false },
+    { name: "Yalova", coordinates: [40.6500, 29.2700], population: "0.3 milyon", sales: 350, coastal: true },
+    { name: "Yozgat", coordinates: [39.8200, 34.8011], population: "0.4 milyon", sales: 150, coastal: false },
+    { name: "Zonguldak", coordinates: [41.4547, 31.7991], population: "0.6 milyon", sales: 500, coastal: true }
+        ];
+
+        var markers = [];
+
+        // Şehirlerin markerlarını ekle
+        cities.forEach(function(city) {
+            var marker = L.marker(city.coordinates).addTo(map);
+            marker.bindPopup("<b>" + city.name + "</b><br>Popülasyon: " + city.population + "<br>Satış: " + city.sales + "<br>Deniz Kenarı: " + (city.coastal ? "Evet" : "Hayır"));
+            markers.push({ marker: marker, city: city });
+        });
+
+        // Kullanıcı seçimlerine göre şehirleri filtreleme
+        function applyFilters() {
+            var selectedPopulation = document.getElementById('population-select').value;
+            var selectedSales = document.getElementById('sales-select').value;
+            var selectedCoastal = document.getElementById('coastal-select').value;
+
+            markers.forEach(function(item) {
+                var city = item.city;
+                var marker = item.marker;
+
+                // Nüfus kısıtlaması
+                var populationMatch = false;
+                if (selectedPopulation === "") {
+                    populationMatch = true;
+                } else {
+                    var population = parseFloat(city.population.split(" ")[0]);
+                    if (selectedPopulation === "small" && population < 5) {
+                        populationMatch = true;
+                    } else if (selectedPopulation === "medium" && population >= 1 && population < 5) {
+                        populationMatch = true;
+                    } else if (selectedPopulation === "large" && population >= 10) {
+                        populationMatch = true;
+                    }
+                }
+
+                // Satış kısıtlaması
+                var salesMatch = false;
+                if (selectedSales === "") {
+                    salesMatch = true;
+                } else {
+                    if (selectedSales === "low" && city.sales < 500) {
+                        salesMatch = true;
+                    } else if (selectedSales === "medium" && city.sales >= 500 && city.sales < 1000) {
+                        salesMatch = true;
+                    } else if (selectedSales === "high" && city.sales >= 1000) {
+                        salesMatch = true;
+                    }
+                }
+
+                // Deniz Kenarı kısıtlaması
+                var coastalMatch = false;
+                if (selectedCoastal === "") {
+                    coastalMatch = true;
+                } else if ((selectedCoastal === "yes" && city.coastal) || (selectedCoastal === "no" && !city.coastal)) {
+                    coastalMatch = true;
+                }
+
+                // Eğer tüm filtreler sağlanıyorsa, marker'ı görünür yap
+                if (populationMatch && salesMatch && coastalMatch) {
+                    marker.setOpacity(1);
+                } else {
+                    marker.setOpacity(0.2);
+                }
+            });
+        }
+
+        // Seçimlerin her biri değiştiğinde filtre uygula
+        document.getElementById('population-select').addEventListener('change', applyFilters);
+        document.getElementById('sales-select').addEventListener('change', applyFilters);
+        document.getElementById('coastal-select').addEventListener('change', applyFilters);
+
+        // Çıkış butonu
+        document.getElementById('logout-button').addEventListener('click', function() {
+            if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>

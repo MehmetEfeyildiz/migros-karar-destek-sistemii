@@ -1,0 +1,126 @@
+/* Genel sıfırlamalar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('../images/loginbackground.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    animation: fadeInBackground 3s ease-in-out forwards;
+}
+
+/* Login formunun etrafındaki container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    position: relative;
+}
+
+/* Login formunun stili */
+.login-form {
+    background-color: rgba(37, 26, 26, 0.8);
+    padding: 40px;
+    border-radius: 8px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInForm 1s ease-out forwards;
+}
+
+/* Form başlığı */
+h2 {
+    margin-bottom: 20px;
+    color: #e0dbdb;
+    font-size: 24px;
+    font-weight: 600;
+    animation: slideDown 0.6s ease-out forwards;
+}
+
+/* Formdaki her input ve label */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    font-size: 14px;
+    color: #c9bfbf;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border 0.3s;
+}
+
+input:focus {
+    border-color: #d3941f;
+    outline: none;
+}
+
+/* Giriş butonunun stili */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #cf9e18;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #c79f1d;
+}
+
+/* Arka plan animasyonu */
+@keyframes fadeInBackground {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Form animasyonları */
+@keyframes fadeInForm {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Başlık animasyonu */
+@keyframes slideDown {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

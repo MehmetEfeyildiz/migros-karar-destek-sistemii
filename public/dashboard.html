@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDS - Modern Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>MİGROS</h2>
+            <ul class="menu">
+                <li class="active"><a href="dashboard.html"><i class="fas fa-home"></i><span class="menu-text">Ana Sayfa</span></a></li>
+                <li><a href="kullanici.html"><i class="fas fa-user"></i><span class="menu-text">Kullanıcı Talepleri</span></a></li>
+                <li><a href="analiz.html"><i class="fas fa-chart-line"></i><span class="menu-text">Haritalı Analiz</span></a></li>
+                <li><a href="satis.html"><i class="fas fa-truck"></i><span class="menu-text">Satış</span></a></li>
+                <li><a href="tahminleme.html"><i class="fas fa-business-time"></i><span class="menu-text">Tahminleme</span></a></li>
+                <li><a href="marketler.html"><i class="fas fa-solid fa-shop"></i><span class="menu-text">Marketler</span></a></li>
+            </ul>
+            <ul class="settings">
+                <li><a href="#"><i class="fas fa-cog"></i><span class="menu-text">Ayarlar</span></a></li>
+            </ul>
+            <ul class="logout">
+                <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Çıkış Yap</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1>MİGROS</h1>
+                <p>Dashboard</p>
+            </header>
+            <div class="widgets">
+                <!-- İstatistik Kartları -->
+                <div class="stat-cards">
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-icon" style="background: linear-gradient(135deg, #4CAF50, #45a049);">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-card-info">
+                <h3>Toplam Satış</h3>
+                <div class="stat-value">
+                    <p>$1,234K</p>
+                    <span class="trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        12.5%
+                    </span>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-detail-item">
+                        <span>Günlük</span>
+                        <span class="value">$45.2K</span>
+                    </div>
+                    <div class="stat-detail-item">
+                        <span>Haftalık</span>
+                        <span class="value">$318K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-chart">
+            <canvas id="salesMiniChart"></canvas>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-icon" style="background: linear-gradient(135deg, #2196F3, #1976D2);">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-card-info">
+                <h3>Aktif Müşteriler</h3>
+                <div class="stat-value">
+                    <p>8,425</p>
+                    <span class="trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        5.3%
+                    </span>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-detail-item">
+                        <span>Yeni</span>
+                        <span class="value">+124</span>
+                    </div>
+                    <div class="stat-detail-item">
+                        <span>Geçici</span>
+                        <span class="value">2.1K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-chart">
+            <canvas id="customersMiniChart"></canvas>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-icon" style="background: linear-gradient(135deg, #FF9800, #F57C00);">
+                <i class="fas fa-truck-fast"></i>
+            </div>
+            <div class="stat-card-info">
+                <h3>Teslimatlar</h3>
+                <div class="stat-value">
+                    <p>1,567</p>
+                    <span class="trend negative">
+                        <i class="fas fa-arrow-down"></i>
+                        2.8%
+                    </span>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-detail-item">
+                        <span>Yolda</span>
+                        <span class="value">245</span>
+                    </div>
+                    <div class="stat-detail-item">
+                        <span>Tamamlanan</span>
+                        <span class="value">1.3K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-chart">
+            <canvas id="deliveryMiniChart"></canvas>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-content">
+            <div class="stat-card-icon" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <div class="stat-card-info">
+                <h3>Gelir</h3>
+                <div class="stat-value">
+                    <p>$1,234K</p>
+                    <span class="trend positive">
+                        <i class="fas fa-arrow-up"></i>
+                        8.7%
+                    </span>
+                </div>
+                <div class="stat-details">
+                    <div class="stat-detail-item">
+                        <span>Gider</span>
+                        <span class="value">$664K</span>
+                    </div>
+                    <div class="stat-detail-item">
+                        <span>Net</span>
+                        <span class="value">$570K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="stat-chart">
+            <canvas id="revenueMiniChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Yeni stat card stilleri */
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+}
+
+.stat-card-content {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.stat-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-card-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-card-info {
+    flex: 1;
+}
+
+.stat-value {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.stat-value p {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.stat-details {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.stat-detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-detail-item span {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.stat-detail-item .value {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.stat-chart {
+    height: 60px;
+    margin-top: auto;
+}
+</style>
+
+<style>
+/* Stat kartları için yeni stiller */
+.stat-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    min-height: 180px;
+    overflow: hidden;
+}
+
+.stat-card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.stat-chart {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover .stat-chart {
+    opacity: 0.8;
+}
+
+.stat-details {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+/* Sadece satış kartı için özel stil */
+.stat-card:first-child .stat-card-icon {
+    margin-left: 15px;  /* İkonu biraz sola kaydır */
+}
+</style>
+
+<script>
+// Mini grafikler için yapılandırma
+document.addEventListener('DOMContentLoaded', function() {
+    const createMiniChart = (ctx, data, color) => {
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', ''],
+                datasets: [{
+                    data: data,
+                    borderColor: color,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    fill: true,
+                    backgroundColor: color.replace('1)', '0.1)'),
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { display: false },
+                    y: { display: false }
+                }
+            }
+        });
+    };
+
+    // Satış mini grafik
+    createMiniChart(
+        document.getElementById('salesMiniChart').getContext('2d'),
+        [30, 40, 35, 50, 49, 60, 70],
+        'rgba(76, 175, 80, 1)'
+    );
+
+    // Müşteri mini grafik
+    createMiniChart(
+        document.getElementById('customersMiniChart').getContext('2d'),
+        [20, 30, 40, 35, 45, 40, 50],
+        'rgba(33, 150, 243, 1)'
+    );
+
+    // Teslimat mini grafik
+    createMiniChart(
+        document.getElementById('deliveryMiniChart').getContext('2d'),
+        [45, 40, 35, 30, 25, 30, 35],
+        'rgba(255, 152, 0, 1)'
+    );
+
+    // Gelir mini grafik
+    createMiniChart(
+        document.getElementById('revenueMiniChart').getContext('2d'),
+        [40, 45, 50, 45, 55, 60, 65],
+        'rgba(156, 39, 176, 1)'
+    );
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const createMiniChart = (ctx, data, color) => {
+        return new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', ''],
+                datasets: [{
+                    data: data,
+                    borderColor: color,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    fill: true,
+                    backgroundColor: `${color.replace('1)', '0.1)')}`,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { 
+                        display: false,
+                        grid: { display: false }
+                    },
+                    y: { 
+                        display: false,
+                        grid: { display: false },
+                        min: Math.min(...data) * 0.8,
+                        max: Math.max(...data) * 1.2
+                    }
+                },
+                elements: {
+                    line: {
+                        tension: 0.4
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                }
+            }
+        });
+    };
+
+    // Satış mini grafik
+    createMiniChart(
+        document.getElementById('salesMiniChart').getContext('2d'),
+        [30, 40, 35, 50, 49, 60, 70],
+        'rgba(76, 175, 80, 1)'
+    );
+
+    // Müşteri mini grafik
+    createMiniChart(
+        document.getElementById('customersMiniChart').getContext('2d'),
+        [20, 30, 40, 35, 45, 40, 50],
+        'rgba(33, 150, 243, 1)'
+    );
+
+    // Teslimat mini grafik
+    createMiniChart(
+        document.getElementById('deliveryMiniChart').getContext('2d'),
+        [45, 40, 35, 30, 25, 30, 35],
+        'rgba(255, 152, 0, 1)'
+    );
+
+    // Gelir mini grafik
+    createMiniChart(
+        document.getElementById('revenueMiniChart').getContext('2d'),
+        [40, 45, 50, 45, 55, 60, 65],
+        'rgba(156, 39, 176, 1)'
+    );
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Satış Grafiği
+    fetch('/api/satislar')
+        .then(response => response.json())
+        .then(data => {
+            // İlk 6 ayı al
+            const firstSixMonths = data.slice(0, 6);
+            
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: firstSixMonths.map(item => item.ay_id),
+                    datasets: [{
+                        label: 'Satışlar',
+                        data: firstSixMonths.map(item => item.satis_miktari),
+                        borderColor: 'white',
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        pointBackgroundColor: 'white'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Veri çekme hatası:', error));
+
+    // Şikayet Dağılımı Grafiği
+    fetch('/api/sikayetler')
+        .then(response => response.json())
+        .then(data => {
+            const complaintsCtx = document.getElementById('customerChart').getContext('2d');
+            new Chart(complaintsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Düşük Öncelikli Şikayetler', 'Orta Öncelikli Şikayetler', 'Yüksek Öncelikli Şikayetler'],
+                    datasets: [{
+                        data: data.map(item => item.sikayet_sayisi),
+                        backgroundColor: [
+                            'rgba(255, 255, 255, 0.9)',
+                            'rgba(255, 255, 255, 0.6)',
+                            'rgba(255, 255, 255, 0.3)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white',
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Öncelik Seviyesine Göre Şikayet Dağılımı',
+                            color: 'white',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Veri çekme hatası:', error));
+});
+</script>
+                <!-- Grafik Widgetları -->
+                <div class="chart-widgets">
+                    <div class="widget large">
+                        <div class="widget-header">
+                            <h3>Satış Analizi</h3>
+                            <div class="widget-actions">
+                                <div class="dropdown">
+                                    <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="dropdown-content">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="widget medium">
+                        <div class="widget-header">
+                            <h3>Şikayet Dağılımı</h3>
+                            <div class="widget-actions">
+                                <div class="dropdown">
+                                    <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="dropdown-content">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="customerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aktivite Timeline yerine yeni market listesi -->
+                <div class="widget new-stores">
+                    <div class="widget-header">
+                        <h3>
+                            <i class="fas fa-store"></i>
+                            Son Açılan Marketler
+                            <span class="badge">+15%</span>
+                        </h3>
+                        <div class="widget-actions">
+                            <div class="dropdown">
+                                <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-content">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stores-list">
+                        <div class="store-item">
+                            <div class="store-icon">
+                                <i class="fas fa-store"></i>
+                                <div class="status-dot active"></div>
+                            </div>
+                            <div class="store-info">
+                                <h4>Migros MM İzmir Karşıyaka</h4>
+                                <p>Açılış: 12 Aralık 2024</p>
+                                <div class="store-metrics">
+                                    <span><i class="fas fa-users"></i> 1.2K Müşteri</span>
+                                    <span><i class="fas fa-chart-line"></i> +25% Büyüme</span>
+                                </div>
+                            </div>
+                            <div class="store-status success">Aktif</div>
+                        </div>
+
+                        <div class="store-item">
+                            <div class="store-icon">
+                                <i class="fas fa-store"></i>
+                                <div class="status-dot active"></div>
+                            </div>
+                            <div class="store-info">
+                                <h4>Migros MM Ankara Çankaya</h4>
+                                <p>Açılış: 5 Aralık 2024</p>
+                                <div class="store-metrics">
+                                    <span><i class="fas fa-users"></i> 950 Müşteri</span>
+                                    <span><i class="fas fa-chart-line"></i> +18% Büyüme</span>
+                                </div>
+                            </div>
+                            <div class="store-status success">Aktif</div>
+                        </div>
+
+                        <div class="store-item">
+                            <div class="store-icon">
+                                <i class="fas fa-store"></i>
+                                <div class="status-dot preparing"></div>
+                            </div>
+                            <div class="store-info">
+                                <h4>Migros MM İstanbul Kadıköy</h4>
+                                <p>Açılış: 20 Ocak 2025</p>
+                                <div class="store-metrics">
+                                    <span><i class="fas fa-clock"></i> Hazırlık Aşamasında</span>
+                                </div>
+                            </div>
+                            <div class="store-status pending">Hazırlanıyor</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Çıkış butonunun işlevi
+        document.getElementById('logout-button').addEventListener('click', () => {
+            if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+                window.location.href = '/';
+            }
+        });
+    </script>
+
+<style>
+.widgets {
+    padding: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.stat-card-icon i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.stat-card-info h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.stat-card-info p {
+    margin: 5px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.trend {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.trend.positive { color: #4CAF50; }
+.trend.negative { color: #F44336; }
+
+.chart-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.widget {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.widget-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.btn-icon:hover {
+    background: #f5f5f5;
+}
+
+.widget-actions .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.chart-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.activity-timeline {
+    margin-top: 20px;
+}
+
+.timeline {
+    padding: 10px;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.timeline-item .time {
+    min-width: 60px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.timeline-item .content h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.timeline-item .content p {
+    margin: 5px 0 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Yeni marketler için stil tanımlamaları */
+.new-stores {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E53) !important;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+}
+
+.stores-list {
+    margin-top: 20px;
+}
+
+.store-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.2s;
+}
+
+.store-item:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.store-icon {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.store-icon i {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #FF6B6B;
+}
+
+.status-dot.active {
+    background: #4CAF50;
+}
+
+.status-dot.preparing {
+    background: #FFC107;
+}
+
+.store-info {
+    flex: 1;
+}
+
+.store-info h4 {
+    margin: 0;
+    color: white;
+    font-size: 1rem;
+}
+
+.store-info p {
+    margin: 4px 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+}
+
+.store-metrics {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+}
+
+.store-metrics span {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.store-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.store-status.success {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+}
+
+.store-status.pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #FFC107;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Satış Grafiği
+    fetch('/api/satislar')
+        .then(response => response.json())
+        .then(data => {
+            // İlk 6 ayı al
+            const firstSixMonths = data.slice(0, 6);
+            
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: firstSixMonths.map(item => item.ay_id),
+                    datasets: [{
+                        label: 'Satışlar',
+                        data: firstSixMonths.map(item => item.satis_miktari),
+                        borderColor: 'white',
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        pointBackgroundColor: 'white'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Veri çekme hatası:', error));
+
+    // Şikayet Dağılımı Grafiği
+    fetch('/api/sikayetler')
+        .then(response => response.json())
+        .then(data => {
+            const complaintsCtx = document.getElementById('customerChart').getContext('2d');
+            new Chart(complaintsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Düşük Öncelikli Şikayetler(Büyük İller)', 'Orta Öncelikli Şikayetler(Orta İller)', 'Yüksek Öncelikli Şikayetler(Küçük İller)'],
+                    datasets: [{
+                        data: data.map(item => item.sikayet_sayisi),
+                        backgroundColor: [
+                            'rgba(255, 255, 255, 0.9)',
+                            'rgba(255, 255, 255, 0.6)',
+                            'rgba(255, 255, 255, 0.3)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white',
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Öncelik Seviyesine Göre Şikayet Dağılımı',
+                            color: 'white',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Veri çekme hatası:', error));
+});
+</script>
+</body>
+</html>

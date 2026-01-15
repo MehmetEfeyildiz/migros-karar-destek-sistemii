@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDS - Modern Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Styling for the select boxes */
+        .select-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .select-container select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .select-container select:hover {
+            background-color: #e0e0e0;
+        }
+        /* Canvas size customization */
+        canvas {
+            max-width: 100%; /* Responsive width */
+        }
+        .widget canvas {
+            width: 1000px; /* Custom width - increased */
+            height: 700px; /* Custom height - increased */
+        }
+        .select-container {
+            margin: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group select {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e63946;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:hover {
+            border-color: #2a9d8f;
+            box-shadow: 0 0 10px rgba(42, 157, 143, 0.2);
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
+
+        .visualization-title {
+            color: #2a9d8f;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff1f2 0%, #fff7ed 100%);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .select-container {
+            background: linear-gradient(135deg, rgba(255, 237, 213, 0.8), rgba(255, 247, 237, 0.8));
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 30px;
+            border-radius: 25px;
+            margin: 30px auto;
+            max-width: 1400px;
+            box-shadow: 0 15px 25px rgba(249, 115, 22, 0.08);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 0;
+        }
+
+        .filter-group select {
+            flex: 1;
+            padding: 16px 24px;
+            font-size: 1rem;
+            color: #9a3412;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(249, 115, 22, 0.3);
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ea580c'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.5em;
+            padding-right: 3rem;
+        }
+
+        .filter-group select:hover {
+            transform: translateY(-2px);
+            border-color: #ea580c;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15);
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #ea580c;
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .filter-group select option {
+            background: white;
+            color: #9a3412;
+            padding: 12px;
+            font-weight: 500;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 60vh; /* Responsive height */
+        }
+
+        .visualization-title {
+            color: #e11d48;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .visualization-title i {
+            color: #f43f5e;
+        }
+
+        canvas {
+            max-height: 50vh !important; /* Limit chart height */
+        }
+
+        .charts-row {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .chart-wrapper {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(255, 237, 213, 0.95), rgba(254, 205, 211, 0.95));
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(251, 113, 133, 0.15);
+            border: 1px solid rgba(251, 113, 133, 0.2);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-content {
+            flex: 1;
+            position: relative;
+            min-height: 300px;
+        }
+
+        .visualization-title {
+            color: #e11d48;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 10px;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .stats-indicator {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid rgba(249, 115, 22, 0.2);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            border-color: #f97316;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+        }
+
+        .stat-item i {
+            font-size: 32px;
+            color: #ea580c;
+            background: rgba(249, 115, 22, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 5px;
+        }
+
+        .stat-item h3 {
+            color: #9a3412;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .stat-item p {
+            color: #ea580c;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #f97316, #ea580c);
+            border-radius: 3px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Add animation for numbers */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-item p {
+            animation: countUp 0.5s ease-out forwards;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-row {
+                flex-direction: column;
+            }
+
+            .chart-wrapper {
+                min-height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-indicator {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-wrapper {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .select-container {
+                padding: 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>MİGROS</h2>
+            <ul class="menu">
+                <li><a href="dashboard.html"><i class="fas fa-home"></i><span class="menu-text">Ana Sayfa</span></a></li>
+                <li><a href="kullanici.html"><i class="fas fa-user"></i><span class="menu-text">Kullanıcı Talepleri</span></a></li>
+                <li><a href="analiz.html"><i class="fas fa-chart-line"></i><span class="menu-text">Haritalı Analiz</span></a></li>
+                <li><a href="satis.html"><i class="fas fa-solid fa-truck"></i><span class="menu-text">Satış</span></a></li>
+                <li><a href="tahminleme.html"><i class="fas fa-solid fa-business-time"></i><span class="menu-text">Tahminleme</span></a></li>
+                <li><a href="marketler.html"><i class="fas fa-solid fa-shop"></i><span class="menu-text">Marketler</span></a></li>
+            </ul>
+            <ul class="settings">
+                <li><a href="#"><i class="fas fa-cog"></i><span class="menu-text">Ayarlar</span></a></li>
+            </ul>
+            <ul class="logout">
+                <li><a href="#" id="logout-button"><i class="fas fa-sign-out-alt"></i><span class="menu-text">Çıkış Yap</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <header class="main-header">
+                <h1><i class="fas fa-store"></i> Migros Planlanan Mağaza Analizi</h1>
+                <p>Türkiye Geneli Migros Planlanan Mağaza Dağılımı</p>
+            </header>
+
+            <div class="stats-indicator">
+                <div class="stat-item">
+                    <i class="fas fa-store"></i>
+                    <h3>Toplam Mağaza</h3>
+                    <p>3,322</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-store-alt"></i>
+                    <h3>Planlanan Mağaza</h3>
+                    <p>526</p>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-map-location-dot"></i>
+                    <h3>Aktif İl</h3>
+                    <p>81</p>
+                </div>
+            </div>
+
+            <div class="select-container">
+                <div class="filter-group">
+                    <select id="regionSelect">
+                        <option value="">Bölge Seçiniz</option>
+                        <option value="marmara">Marmara Bölgesi</option>
+                        <option value="ege">Ege Bölgesi</option>
+                        <option value="akdeniz">Akdeniz Bölgesi</option>
+                        <option value="ic-anadolu">İç Anadolu Bölgesi</option>
+                        <option value="karadeniz">Karadeniz Bölgesi</option>
+                        <option value="dogu-anadolu">Doğu Anadolu Bölgesi</option>
+                        <option value="guneydogu-anadolu">Güneydoğu Anadolu Bölgesi</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-wrapper">
+                    <h2 class="visualization-title">
+                        <i class="fas fa-store-alt"></i>
+                        Mağaza Dağılımı
+                    </h2>
+                    <div class="chart-content">
+                        <canvas id="storeChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h2 class="visualization-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Planlanan Talep Analizi
+                    </h2>
+                    <div class="chart-content">
+                        <canvas id="demandChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // First Chart (Store Distribution)
+                    const storeCtx = document.getElementById('storeChart').getContext('2d');
+                    let storeChart = new Chart(storeCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['3M', '5M', 'Jet'],
+                            datasets: [{
+                                label: 'Mağaza Sayısı',
+                                data: [12, 19, 3],
+                                backgroundColor: [
+                                    '#ea580c', // Changed to orange
+                                    '#f97316',
+                                    '#fb923c'
+                                ],
+                                borderRadius: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        boxWidth: 15,
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Second Chart (Demand Analysis)
+                    const demandCtx = document.getElementById('demandChart').getContext('2d');
+                    let demandChart = new Chart(demandCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Karşılanan', 'Bekleyen', 'İptal'],
+                            datasets: [{
+                                data: [65, 25, 10],
+                                backgroundColor: [
+                                    '#ea580c', // Changed to orange
+                                    '#f97316',
+                                    '#fb923c'
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        boxWidth: 15,
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Bölge seçimi değiştiğinde grafikleri güncelle
+                    document.getElementById('regionSelect').addEventListener('change', function() {
+                        const selectedRegion = this.value;
+                        // Burada seçilen bölgeye göre grafikleri güncelleyebilirsiniz
+                        updateChartsForRegion(selectedRegion);
+                    });
+
+                    function updateChartsForRegion(region) {
+                        // Örnek veri güncelleme - gerçek uygulamada API'den veri çekilecek
+                        const regionData = {
+                            'marmara': { stores: [25, 30, 45], demand: [70, 20, 10] },
+                            'ege': { stores: [20, 25, 35], demand: [65, 25, 10] },
+                            'akdeniz': { stores: [15, 20, 30], demand: [60, 30, 10] },
+                            'ic-anadolu': { stores: [18, 22, 32], demand: [62, 28, 10] },
+                            'karadeniz': { stores: [12, 18, 25], demand: [58, 32, 10] },
+                            'dogu-anadolu': { stores: [10, 15, 20], demand: [55, 35, 10] },
+                            'guneydogu-anadolu': { stores: [8, 12, 18], demand: [52, 38, 10] }
+                        };
+
+                        // Seçilen bölgenin verilerini al
+                        const data = regionData[region] || { stores: [12, 19, 3], demand: [65, 25, 10] };
+
+                        // Grafikleri güncelle
+                        storeChart.data.datasets[0].data = data.stores;
+                        storeChart.update();
+
+                        demandChart.data.datasets[0].data = data.demand;
+                        demandChart.update();
+                    }
+                });
+            </script>
+        </div>
+    </div>
+</body>
+</html>
