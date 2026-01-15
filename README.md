@@ -284,7 +284,7 @@ erDiagram
         date target_date
         int city_id FK
     }
-
+```
 See `database/schema.sql` for complete schema with indexes and relationships.
 
 ## 🔧 Development
@@ -329,6 +329,7 @@ ISC
 ## 👨‍💻 Author
 
 University Assignment - Mehmet Efe Yıldız
+
 
 
 
